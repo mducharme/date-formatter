@@ -89,11 +89,6 @@ $parsed = $parser($date);
 
 The formatter is the main Service provided by this library. It has a single purpose, to render a DateTime object into a formatted string (or multiple formats).
 
-
-```php
-
-```
-
 As a single-purpose service, the `Formatter` is also invokable:
 
 ```php
@@ -113,7 +108,7 @@ It is possible to add custom formats, or overwrite default ones, by passing an o
 
 ```php
 $customFormats = [
-'is-leap-year' => function(\DateTimeInterface $date) {
+    'is-leap-year' => function(\DateTimeInterface $date) {
         return ($date->format('L') ? 'Yes' : 'No';
     },
     'custom-string' => 'H:i:S (u) d-m-Y'
@@ -127,11 +122,17 @@ echo $formatter(new DateTime('2012-01-01'), 'is-leap-year');
 echo $formatter(new DateTime('2012-01-01'), 'custom-string');
 ```
 
+It is also possible to return an array of formatted dates, by specifying an array of formats:
+
+```php
+$formats = $formatter('2012-01-01', ['atom', 'custom-string', 'is-leap-year']);
+```
+
 _Formats_ can either be a string, which will be formatted with `DateTimeInterface::format()` or a callback function with the following signature:
 
 ```php
 /**
- * @param \DateTimeInterfae A date object.
+ * @param \DateTimeInterface A date object.
  * @return string
  */
 function callback(\DateTimeInterface $date);
@@ -149,6 +150,8 @@ $formatter2 = new Formatter($parser, null, 'rfc822');
 echo $formatter2($date);
 ```
 
+
+
 ## The Service Provider
 
 As a convenience, a Pimple Service Provider is also included for an already bootstrapped parser  (`date/parser`) and formatter (`date/formatter`).
@@ -161,5 +164,5 @@ $parser = $container['date/parser'];
 $formatter = $container['date/formatter'];
 ```
 
-To customize the options, the `date/custom-formats` and `date/default-format` container options can be extended:
+To customize the options, the `date/custom-formats` and `date/default-format` container options can be extended.
 

@@ -17,10 +17,11 @@ final class Formatter
      * @var Parser
      */
     private $parser;
+
     /**
      * @var array The array of possible formats.
      */
-    private $customFormats;
+    private $allFormats;
 
     /**
      * @var string
@@ -36,8 +37,8 @@ final class Formatter
     public function __construct(Parser $parser, array $customFormats = [], $defaultFormat = 'atom')
     {
         $this->parser = $parser;
-        $this->customFormats = $customFormats;
         $this->defaultFormat = $defaultFormat;
+        $this->allFormats = array_merge($this->defaultFormats(), $customFormats);
     }
 
     /**
@@ -70,7 +71,7 @@ final class Formatter
             $format = $this->defaultFormat;
         }
 
-        $allFormats = array_merge($this->defaultFormats(), $this->customFormats);
+        $allFormats = $this->allFormats();
 
         if ($format === self::ALL) {
             $format = array_keys($allFormats);
@@ -151,5 +152,13 @@ final class Formatter
 
             'timestamp' => 'U'
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function allFormats()
+    {
+        return $this->allFormats;
     }
 }
